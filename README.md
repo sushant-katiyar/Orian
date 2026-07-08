@@ -1,0 +1,1 @@
+Design Principle #1: Put shared behavior in one place instead of repeating it.
