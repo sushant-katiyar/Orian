@@ -6,15 +6,18 @@
 
 import subprocess
 from exceptions import DeviceNotConnectedError
+import os
 
 class AndroidPhone:
     def __init__(self):
         self.device_id = None
-    _NO_CONNECTION_NEEDED = {"devices", "version"}
+
+    def run_shell(self,*args):
+
+        self._ensure_connected()
+        return self.run_adb("shell", *args)
 
     def run_adb(self, *args):
-        if args and args[0] not in self._NO_CONNECTION_NEEDED:
-            self._ensure_connected()
 
         command = ["adb"] + list(args)
 
@@ -35,32 +38,41 @@ class AndroidPhone:
         return self.run_adb("devices")
     
     def home(self):
-        self.run_adb("shell", "input", "keyevent", "3")
+        return self.run_shell("input", "keyevent", "3")
     
     def back(self):
-        self.run_adb("shell", "input", "keyevent", "4")
+        return self.run_shell("input", "keyevent", "4")
     
     def tap(self,x,y):
-        self.run_adb("shell","input","tap",str(x),str(y))
+        return self.run_shell("input","tap",str(x),str(y))
     
     def swipe(self, x1, y1, x2, y2):
-        self.run_adb("shell","input","swipe",str(x1),str(y1),str(x2),str(y2))
+        return self.run_shell("input","swipe",str(x1),str(y1),str(x2),str(y2))
     
     def power(self):
-        self.run_adb("shell","input","keyevent","26")
+        return self.run_shell("input","keyevent","26")
     
     def volume_up(self):
-        self.run_adb("shell","input","keyevent","24")
+        return self.run_shell("input","keyevent","24")
 
     def volume_down(self):
-        self.run_adb("shell","input","keyevent","25")
+        return self.run_shell("input","keyevent","25")
 
     def get_serial(self):
         serial = self.run_adb("get-serialno")
         return serial.stdout.strip()
     
+    def screenshot(self, local_path = "HiddenObjectAi/screenshots/screen.png"):
+        os.makedirs(os.path.dirname(local_path),exist_ok=True)
+        device_path = "/sdcard/screen.png"
+        self.run_shell("screencap","-p",device_path)
+        self.run_adb("pull",device_path,local_path)
+        return local_path
+    
     def is_connected(self):
         result = self.run_adb("devices")
         lines = result.stdout.strip().splitlines()
-        return any(line.split()[-1]=="device" for line in lines[1:])
+        return any(
+            parts and parts[-1] == "device" 
+            for line in lines[1:] for parts in [line.split()])
         
