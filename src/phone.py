@@ -17,14 +17,14 @@ class AndroidPhone:
         self._ensure_connected()
         return self.run_adb("shell", *args)
 
-    def run_adb(self, *args):
+    def run_adb(self, *args, text=True):
 
         command = ["adb"] + list(args)
 
         result = subprocess.run(
             command,
             capture_output=True,
-            text=True
+            text=text
         )
 
 
