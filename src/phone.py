@@ -6,7 +6,6 @@
 
 import subprocess
 from exceptions import DeviceNotConnectedError
-import os
 
 class AndroidPhone:
     def __init__(self):
@@ -62,12 +61,6 @@ class AndroidPhone:
         serial = self.run_adb("get-serialno")
         return serial.stdout.strip()
     
-    def screenshot(self, local_path = "HiddenObjectAi/screenshots/screen.png"):
-        os.makedirs(os.path.dirname(local_path),exist_ok=True)
-        device_path = "/sdcard/screen.png"
-        self.run_shell("screencap","-p",device_path)
-        self.run_adb("pull",device_path,local_path)
-        return local_path
     
     def is_connected(self):
         result = self.run_adb("devices")
