@@ -3,15 +3,16 @@
 from phone import AndroidPhone
 from screen import ScreenCapture
 from vision import Vision
+import cv2
+
 
 phone = AndroidPhone()
-
 screen = ScreenCapture(phone)
-
-image = screen.capture()
-
 vis = Vision()
-test=vis.find_on_screen(image,"Orian\\screenshots\\screenshot2.png",raise_if_missing=False)
+
+
+img = screen.capture()
+test = vis.find_text_on_screen(img,"Word")
 print(test)
 
-phone.tap(162, 1318)
+phone.tap(666,861)
