@@ -44,7 +44,7 @@ class Vision:
 
         return tap_target
 
-    def scan_all_templates(self, screenshot, template_dir, threshold=0.8):
+    def scan_all_templates(self, screenshot, template_dir, threshold=0.8) -> dict:
         results = []
 
         for filename in os.listdir(template_dir):
@@ -64,7 +64,7 @@ class Vision:
 
             row = {
                 "text": name,
-                "confidence": match["max_val"],
+                "confidence": f"{match["max_val"]*100:.2f}",
                 "left": match["left"],
                 "top": match["top"],
                 "width": match["width"],
@@ -107,7 +107,7 @@ class Vision:
                 processed.append(row)
         return processed  
     
-    def get_best_ocr_result(self, img, min_confidence):
+    def get_best_ocr_result(self, img, min_confidence=60):
         data = pytesseract.image_to_data(img, output_type=pytesseract.Output.DICT)
         filtered_data = self.filtering_data(data, min_confidence)
         if filtered_data:
@@ -126,7 +126,7 @@ class Vision:
         
         return []
     
-    def find_text_on_screen(self,img, target_text,min_confidence=60):
+    def find_text_on_screen(self,img, target_text,min_confidence=60)->dict:
         data = self.get_best_ocr_result(img,min_confidence)
         matching_dicts = [d for d in data if target_text.lower() in d["text"].lower()]
 

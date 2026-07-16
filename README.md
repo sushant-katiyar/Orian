@@ -113,7 +113,7 @@ Full design details are in `PROJECT_ORION_NOTES.md`.
 project-orion/
 ├── android_phone.py      # Milestone 1 — AndroidPhone, DeviceNotConnectedError
 ├── screen_capture.py      # Milestone 2 — ScreenCapture
-├── vision.py              # Milestones 2–4 — Vision (template match + OCR + scan_all_templates)
+├── vision.py              # Milestones 3 — Vision (template match + OCR + scan_all_templates)
 ├── bridge.py               # Milestone 4 — merges Vision output → coordinate dict (upcoming)
 ├── brain.py                # Milestone 4 — LLM call + prompt/history management (upcoming)
 ├── executor.py             # Milestone 4 — validates JSON action, executes it (upcoming)

@@ -3,8 +3,8 @@
 from phone import AndroidPhone
 from screen import ScreenCapture
 from vision import Vision
-import cv2
-
+import nerve as nv
+from PIL import Image
 
 phone = AndroidPhone()
 screen = ScreenCapture(phone)
@@ -12,7 +12,10 @@ vis = Vision()
 
 
 img = screen.capture()
-test = vis.find_text_on_screen(img,"Word")
-print(test)
+height,width,channel = img.shape
 
-phone.tap(666,861)
+test = vis.get_best_ocr_result(img)
+test2=vis.scan_all_templates(img,"Orian/templates")
+nerve = nv.build_label_map(test,test2,height)
+print(nerve)
+
